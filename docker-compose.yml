@@ -1,0 +1,38 @@
+version: "3"
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "80:80"
+    environment:
+      - CONSUL_URL=consul:8500
+    links:
+      - consul
+  service1:
+    build: ./service1
+    ports:
+      - "3000:3000"
+    environment:
+      - CONSUL_URL=consul:8500
+    links:
+      - consul
+  service2:
+    build: ./service2
+    ports:
+      - "3000:3000"
+    environment:
+      - CONSUL_URL=consul:8500
+    links:
+      - consul
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    links:
+      - api-gateway
+  consul:
+    image: "consul"
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
